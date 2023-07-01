@@ -14,9 +14,6 @@ export default class RandomPlanet extends Component {
     };
 
     swapiService = new SwapiService();
-    constuctor() {
-        console.log('test');
-    }
 
     componentDidMount(){
         console.log('componentDidMount');

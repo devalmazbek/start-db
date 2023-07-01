@@ -1,24 +1,41 @@
-import React from "react";
+import React, { Component } from "react";
 import Header from "../header";
 import RandomPlanet from "../random-planet";
-import PersonDetail from "../person-detail";
+import ItemList from "../item-list";
+import PersonDetail from "../person-detail/person-detail";
 
-const App = () => {
-    return(
-        <div className="container">
-            <Header />
-            <div className="container mt-3">
-                <div className="row">
-                    <div className="col-6">
-                        <RandomPlanet />
+export default class App extends Component {
+    state = {
+        selectedPerson: 1
+    }
+
+    onPersonSelected = (id) => {
+        this.setState({
+            selectedPerson: id
+        });
+    }
+
+    render() {
+        return(
+            <div className="container">
+                <Header />
+                <div className="container mt-3">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <RandomPlanet />
+                        </div>
                     </div>
-                    <div className="col-6">
-                        <PersonDetail />
+                    <div className="row mt-3 mb-5">
+                        <div className="col-sm-6">
+                            <ItemList onPersonSelected={this.onPersonSelected}/> 
+                        </div>
+                        <div className="col-sm-6 mt-3">
+                            <PersonDetail selectedPerson={this.state.selectedPerson}/>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        );
+    }
+    
 }
-
-export default App;

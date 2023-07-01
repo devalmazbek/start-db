@@ -1,0 +1,4 @@
+.item-list > li {
+    padding: 10px;
+    cursor: pointer;
+}
