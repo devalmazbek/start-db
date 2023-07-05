@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SwapiService from '../../service/swapi-service';
 import Spinner from '../spinner';
 import './person-detail.css';
+import ErrorButton from '../error-button';
 
 export default class PersonDetail extends Component {
     SwapiService = new SwapiService();
@@ -19,6 +20,8 @@ export default class PersonDetail extends Component {
             this.upDatePersonDetail();
         }
      }
+
+    
 
     upDatePersonDetail() {
         const {selectedPerson} = this.props;
@@ -66,6 +69,7 @@ export default class PersonDetail extends Component {
                 <div className="card text-white bg-secondary mb-3">
                     <div className="card-header">Person Details</div>
                     {showPersonDetail()}
+                    <ErrorButton />
                 </div>
             </div>
         );
