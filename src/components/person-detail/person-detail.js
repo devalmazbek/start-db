@@ -7,39 +7,39 @@ import ErrorButton from '../error-button';
 export default class PersonDetail extends Component {
     SwapiService = new SwapiService();
     state = {
-        personDetail: null,
+        itemDetail: null,
         loadign: true,
     }
 
     componentDidMount() {
-        this.upDatePersonDetail();
+        this.upDateItemDetail();
     }
 
     componentDidUpdate(prevProps) {
-        if(this.props.selectedPerson !== prevProps.selectedPerson) {
-            this.upDatePersonDetail();
+        if(this.props.selectedItem !== prevProps.selectedItem) {
+            this.upDateItemDetail();
         }
      }
 
     
 
-    upDatePersonDetail() {
-        const {selectedPerson} = this.props;
-        if(!selectedPerson) {
+    upDateItemDetail() {
+        const {selectedItem} = this.props;
+        if(!selectedItem) {
             return <Spinner/>
         }
         else {
-            this.SwapiService.getPerson(selectedPerson)
-            .then((person) => {
+            this.SwapiService.getPerson(selectedItem)
+            .then((item) => {
                 this.setState({
-                    personDetail: person
+                    itemDetail: item
                 });
             });
         }
     }
 
-    renderPersonDetail() {
-        const {name, id, gender, eyeColor, birthYear} = this.state.personDetail;
+    renderItemDetail() {
+        const {name, id, gender, eyeColor, birthYear} = this.state.itemDetail;
         return (<div className="card-body d-flex align-items-center">
                         <div className="img">
                             <img src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`} alt='random planet img'/>
@@ -53,12 +53,12 @@ export default class PersonDetail extends Component {
                     </div>);
     }
     render() {
-        const showPersonDetail = () => {
-            if(!this.state.personDetail) {
+        const showItemDetail = () => {
+            if(!this.state.itemDetail) {
                 return <Spinner />
             }
             else {
-                return this.renderPersonDetail();
+                return this.renderItemDetail();
             }
         }
         
@@ -68,7 +68,7 @@ export default class PersonDetail extends Component {
             <div className="person-detail">
                 <div className="card text-white bg-secondary mb-3">
                     <div className="card-header">Person Details</div>
-                    {showPersonDetail()}
+                    {showItemDetail()}
                     <ErrorButton />
                 </div>
             </div>

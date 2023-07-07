@@ -3,24 +3,18 @@ import ItemList from "../item-list";
 import PersonDetail from "../person-detail/person-detail";
 import ErrorIndecator from "../error";
 import Row from "../row";
+import ErrorBoundary from "../error-boundary/error-boundary";
 
 export default class PersonPage extends Component {
     state = {
-        selectedPerson: 1,
-        hasError: false
+        selectedItem: 1,
     }
 
-    componentDidCatch(error, info) {
-        debugger;
-        this.setState({
-            hasError: true,
-        });
-        console.log(error, info);   
-    }
+    
 
-    onPersonSelected = (id) => {
+    onItemSelected = (id) => {
         this.setState({
-            selectedPerson: id
+            selectedItem: id
         });
     }
 
@@ -29,16 +23,18 @@ export default class PersonPage extends Component {
             return <ErrorIndecator />
         }
 
-        const itemList = <ItemList onPersonSelected={this.onPersonSelected}
-                                   getData={this.props.getData}/>;
+        const itemList = <ItemList onItemSelected={this.onItemSelected}
+                                   getData={this.props.getData}>
+                                    {(item)=> `${item.name} ${item.gender} ${item.birthYear}`}
+                        </ItemList>;
 
-        const personDetail = <PersonDetail selectedPerson={this.state.selectedPerson}/>
+        const personDetail = (<PersonDetail selectedItem={this.state.selectedItem}/>)
 
         return(
-            <>
+            <ErrorBoundary>
                 <Row leftComponent={itemList} rightComponent={personDetail} />
-            </>
-            
+            </ErrorBoundary>
+                            
         );
     }
 }
