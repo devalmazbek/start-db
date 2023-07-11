@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import SwapiService from '../../service/swapi-service';
 import Spinner from '../spinner';
-import './person-detail.css';
+import './item-details.css';
 import ErrorButton from '../error-button';
 
-export default class PersonDetail extends Component {
+export default class ItemDetail extends Component {
     SwapiService = new SwapiService();
     state = {
         itemDetail: null,
         loadign: true,
+        itemImage: null,
     }
 
     componentDidMount() {
@@ -24,38 +25,40 @@ export default class PersonDetail extends Component {
     
 
     upDateItemDetail() {
-        const {selectedItem} = this.props;
+        const {selectedItem, getData, getImageURL} = this.props;
         if(!selectedItem) {
             return <Spinner/>
         }
         else {
-            this.SwapiService.getPerson(selectedItem)
+            getData(selectedItem)
             .then((item) => {
                 this.setState({
-                    itemDetail: item
+                    itemDetail: item,
+                    itemImage: getImageURL(item)
                 });
             });
         }
     }
 
     renderItemDetail() {
+        const item = this.state.itemDetail;
         const {name, id, gender, eyeColor, birthYear} = this.state.itemDetail;
         return (<div className="card-body d-flex align-items-center">
                         <div className="img">
-                            <img src={`https://starwars-visualguide.com/assets/img/characters/${id}.jpg`} alt='random planet img'/>
+                            <img src={this.state.itemImage} alt='img'/>
                         </div>                
                         <div className="list-group">
-                            <li className="list-group-item list-group-item-action">{name}</li>
-                            <li className="list-group-item list-group-item-action">{gender}</li>
-                            <li className="list-group-item list-group-item-action">{eyeColor}</li>
-                            <li className="list-group-item list-group-item-action">{birthYear}</li>
+                            {React.Children.map(this.props.children, (child) => {
+                                return React.cloneElement(child, {item});
+                            })}
                         </div>
                     </div>);
     }
     render() {
+        const title = this.props.title;
         const showItemDetail = () => {
-            if(!this.state.itemDetail) {
-                return <Spinner />
+            if(!this.state.itemDetail && !this.state.itemImage) {
+                return <Spinner /> 
             }
             else {
                 return this.renderItemDetail();
@@ -67,7 +70,7 @@ export default class PersonDetail extends Component {
         return(
             <div className="person-detail">
                 <div className="card text-white bg-secondary mb-3">
-                    <div className="card-header">Person Details</div>
+                    <div className="card-header">{title} Detail</div>
                     {showItemDetail()}
                     <ErrorButton />
                 </div>

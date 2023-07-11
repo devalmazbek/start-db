@@ -7,20 +7,14 @@ import './item-list.css';
 export default class ItemList extends Component {
     
     SwapiService = new SwapiService();
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         peopleList: null,
-    //     }
-    // }
 
     state = {
         itemList: null
     }
 
     componentDidMount() {
-        const { getData } = this.props;
-        getData()
+        // const { getData } = this.props;
+        this.SwapiService.getAllPeople()
         .then((itemList) => {
             this.onPeopleLoaded(itemList)
         })
@@ -36,7 +30,7 @@ export default class ItemList extends Component {
     renderItems(arr) {
         return arr.map((item) => {
             if(item.id <=7) {
-                const {id, name} = item;
+                const {id} = item;
                 const label = this.props.children(item);
                 return(
                     <li key={id}
