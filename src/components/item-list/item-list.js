@@ -4,63 +4,74 @@ import SwapiService from '../../service/swapi-service';
 
 import './item-list.css';
 
-export default class ItemList extends Component {
+const ItemList = (props) => {
     
-    SwapiService = new SwapiService();
-
-    state = {
-        itemList: null
+    const showItemList = () => {
+        if(!props.data) {
+            return <Spinner/>
+        }
+        else if(props.data) {
+            return renderItemList(props.data);
+        }
     }
 
-    componentDidMount() {
-        // const { getData } = this.props;
-        this.SwapiService.getAllPeople()
-        .then((itemList) => {
-            this.onPeopleLoaded(itemList)
-        })
-        .catch((error) => console.log(error));
+    const renderItemList = (itemList) => {
+        return(itemList.map((item) => {
+                if(item.id <=7) {
+                    const {id} = item;
+                    const label = this.props.children(item);
+                    return(
+                        <li key={id}
+                            onClick={() => this.props.onItemSelected(id)}
+                            className='list-group-item list-group-item-action'>
+                            {label}
+                        </li>
+                    );
+                }
+            })
+        );   
     }
+    
 
-    onPeopleLoaded = (itemList) => {
-        this.setState({
-            itemList: itemList,
-        });
-    }
+    return(
+        <div className="list-group item-list">
+            {showItemList()}
+        </div>
+    );
+} 
 
-    renderItems(arr) {
-        return arr.map((item) => {
-            if(item.id <=7) {
-                const {id} = item;
-                const label = this.props.children(item);
-                return(
-                    <li key={id}
-                        onClick={() => this.props.onItemSelected(id)}
-                        className='list-group-item list-group-item-action'>
-                        {label}
-                    </li>
-                );
-            }
-            
-        });
-    }   
-
-    render() {
-        const {itemList} = this.state;
-        const showPeolpList = () => {
-            if(!itemList) {
-                return <Spinner/>  
-              }
-            else{
-                const personItem = this.renderItems(itemList); 
-                return personItem;
-            }
+const widthData = (View) => {
+    return class extends Component {
+        state = {
+            data: null
+        }
+    
+        componentDidMount() {
+            const { getData } = this.props;
+            getData()
+            .then((data) => {
+                this.onPeopleLoaded(data)
+            })
+            .catch((error) => console.log(error));
         }
 
-        return(
-            <div className="list-group item-list">
-                {showPeolpList()}
-            </div>
-        );
+        onPeopleLoaded = (data) => {
+            this.setState({
+                data: data,
+            });
+            console.log(this.state.data);
+        }
+
+        render() {
+            const {data} = this.state;
+            
+            if(!data) {
+                return <Spinner/>  
+            }
+            return <View {...this.props} data={data}/>
+            
+        }
     }
-    
 }
+
+export default widthData(ItemList);

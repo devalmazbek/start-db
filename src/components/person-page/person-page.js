@@ -7,7 +7,6 @@ import ErrorBoundary from "../error-boundary/error-boundary";
 import SwapiService from "../../service/swapi-service";
 
 export default class PersonPage extends Component {
-    SwapiService = new SwapiService();
     state = {
         selectedItem: 1,
     }
@@ -27,14 +26,14 @@ export default class PersonPage extends Component {
 
         const itemList = <ItemList onItemSelected={this.onItemSelected}
                                     getData={this.props.getData}>
-                                    {(item)=> `${item.name} ${item.gender} ${item.birthYear}`}
+                                    {(item)=> `${item.name}`}
                         </ItemList>;
 
         const personDetail = (<ItemDetail selectedItem={this.state.selectedItem}/>)
 
         return(
             <ErrorBoundary>
-                <Row leftComponent={itemList}  />
+                  <Row leftComponent={itemList}/>
             </ErrorBoundary>
                             
         );
